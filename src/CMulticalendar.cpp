@@ -2289,7 +2289,7 @@ string CMulticalendar::generateRrule(int iRepeatType, time_t iUntil,
     string result;
     struct icaltimetype uical;
 
-    uical = icaltime_from_timet(iUntil, 1);
+    uical = icaltime_from_timet_with_zone(iUntil, 1, NULL);
     string ustring = icaltime_as_ical_string(uical);
     result = s1 + test[iRepeatType - 1] + s2 + ustring;
     result = result + "Z";
