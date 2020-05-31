@@ -27,6 +27,7 @@
 
 #include "VCalConverter.h"
 #include <sstream>
+#include <climits>
 #include "CAlarm.h"
 #include "Common.h"
 

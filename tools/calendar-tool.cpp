@@ -52,7 +52,7 @@ string generateRrule(int repeattype, time_t until)
 	string result;
 	struct icaltimetype uical;
 
-	uical = icaltime_from_timet(until, 0);
+	uical = icaltime_from_timet_with_zone(until, 0, NULL);
 	string ustring = icaltime_as_ical_string(uical);
 	result = s1 + test[repeattype - 1] + s2 + ustring;
 	
