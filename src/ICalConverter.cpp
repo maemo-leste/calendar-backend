@@ -442,7 +442,7 @@ string ICalConverter::getIcalAlarm(CAlarm * cAlarm,string sZone,bool isAllday)
     ical_ctime = icaltime_from_timet_with_zone(ctime,0, 
             icaltimezone_get_builtin_timezone(sZone.c_str()));
     if (isAllday)
-    ical_ctime.is_utc = 0;
+    // ical_ctime.is_utc = 0;
     trigger.time = ical_ctime;
 
     
@@ -1175,7 +1175,7 @@ template<class T> void ICalConverter::exportDueFromLocal(icalcomponent *pEntcomp
     dtstart = pComp->getDue();
     ical_dtstart = icaltime_from_timet_with_zone(dtstart, 0,
        	icaltimezone_get_builtin_timezone(szZone.c_str()));
-    ical_dtstart.is_utc=0; 
+    // ical_dtstart.is_utc=0; 
 
    pProp = icalproperty_new_due(ical_dtstart);
    icalcomponent_add_property(pEntcomp, pProp);
@@ -1213,7 +1213,7 @@ void ICalConverter::exportDateStartFromLocal(icalcomponent *pEntcomp, T *pComp,F
 	      * time so that in other devices they are treated as 
 	      * alldays 
 	      */
-	     ical_dtstart.is_utc = 0;
+	     // ical_dtstart.is_utc = 0;
      }
 
     limitDateRange(ical_dtstart,true);
@@ -1411,7 +1411,7 @@ void  ICalConverter:: findZoneStartTime(string &szTime, int correction)
    CAL_DEBUG_LOG("Input string is %s", szTime.c_str());
    current_utc_offset = time_get_time_diff(offset_time,szZone.c_str(), "UTC");
    
-   if (startTime.is_utc == 1)
+   if (icaltime_is_utc(startTime))
    { 
        /* Convert the time to UTC based on the offset */ 
 	   CAL_DEBUG_LOG("inside UTC ");
@@ -1420,7 +1420,7 @@ void  ICalConverter:: findZoneStartTime(string &szTime, int correction)
     
         /* convert it back to icaltimetype */
        startTime = icaltime_from_timet_with_zone(offset_time,0,icaltimezone_get_builtin_timezone("UTC"));
-       startTime.is_utc = 0;
+//       startTime.is_utc = 0;
 	   
    }
    else
@@ -1433,7 +1433,7 @@ void  ICalConverter:: findZoneStartTime(string &szTime, int correction)
     CAL_DEBUG_LOG(" Hour is:    %d ", startTime.hour);
     CAL_DEBUG_LOG(" Minute  is: %d ", startTime.minute);
     CAL_DEBUG_LOG(" Second is : %d ", startTime.second);
-    CAL_DEBUG_LOG(" Is UTC :    %d ",startTime.is_utc);
+//    CAL_DEBUG_LOG(" Is UTC :    %d ",startTime.is_utc);
     CAL_DEBUG_LOG("**********************************");
    /* 
     * since local time adds the GMT offset while computation 
@@ -1733,7 +1733,7 @@ void ICalConverter::exportEventDateEndFromLocal(icalcomponent *pEntcomp, CEvent 
 		 * in floating time so that in other devices they remain as
 		 * alldays
 		 */
-		ical_dtend.is_utc= 0;
+		//ical_dtend.is_utc= 0;
     }
     limitDateRange(ical_dtend,true);
     pProp = icalproperty_new_dtend(ical_dtend);
@@ -2603,7 +2603,7 @@ string ICalConverter::localToIcalVcal(CComponent * pEntry, FileType iType,
     		ical_rdate = icaltime_from_timet_with_zone (time_t_rdate, 0,
     						icaltimezone_get_builtin_timezone(szZone.c_str()));
 		if( pEntry->getAllDay())
-			ical_rdate.is_utc=0;
+			//ical_rdate.is_utc=0;
     		CAL_DEBUG_LOG("RDATE %s", icaltime_as_ical_string (ical_rdate));
     		strRDate = strRDate + icaltime_as_ical_string (ical_rdate) + delimeter;
     }
@@ -2619,7 +2619,7 @@ string ICalConverter::localToIcalVcal(CComponent * pEntry, FileType iType,
     		ical_exdate = icaltime_from_timet_with_zone (time_t_exdate, 0,
     						icaltimezone_get_builtin_timezone(szZone.c_str()));	
 		if( pEntry->getAllDay())
-			ical_rdate.is_utc=0;
+			//ical_rdate.is_utc=0;
     		CAL_DEBUG_LOG("EXDATE %s", icaltime_as_ical_string (ical_exdate));
     		strERDate = strERDate + icaltime_as_ical_string (ical_exdate) + delimeter;
     }
@@ -2912,7 +2912,7 @@ vector < string > ICalConverter::getRecurrenceDates(string strIcalComp,
         tempExDate = icaltime_from_string(szTemp.c_str());
         if (!icaltime_is_valid_time(tempExDate))
     	  break;
-        if (tempExDate.is_utc == 1)
+        if (icaltime_is_utc(tempExDate))
         	Zone = "UTC";
         exceptionTime = icaltime_as_timet_with_zone(tempExDate,
         		icaltimezone_get_builtin_timezone(Zone.c_str()));
@@ -3107,7 +3107,7 @@ if (pComp) {
         {
 
         	string szTempZone = szZone;
-        	if(trigger.time.is_utc == 1)
+        	if(1) //trigger.time.is_utc == 1)
         		szTempZone = "UTC";
         	st_time =icaltime_as_timet_with_zone(trigger.time,
         			icaltimezone_get_builtin_timezone(szTempZone.c_str()));
@@ -4441,8 +4441,8 @@ ICalConverter::importEventDateStartAndDateEnd (
 
     /* check if any one of these is in UTC if so 
      * convert them to Components timezone */
-    CAL_DEBUG_LOG("is start time UTC : %d",s_time.is_utc  );
-    CAL_DEBUG_LOG("is end time UTC : %d",e_time.is_utc  );
+//    CAL_DEBUG_LOG("is start time UTC : %d",s_time.is_utc  );
+//    CAL_DEBUG_LOG("is end time UTC : %d",e_time.is_utc  );
     CAL_DEBUG_LOG("start timezone: %p",s_time.zone  );
     CAL_DEBUG_LOG("end   timezone: %p",e_time.zone  );
 
@@ -4455,11 +4455,11 @@ ICalConverter::importEventDateStartAndDateEnd (
     limitDateRange(s_time,false);
     limitDateRange(e_time,false);
 
-    if (s_time.is_utc)
+    if (icaltime_is_utc(s_time))
     		s_time = icaltime_convert_to_zone(s_time,
     				icaltimezone_get_builtin_timezone(startTimeZone.c_str()));
 
-    if (e_time.is_utc)
+    if (icaltime_is_utc(e_time))
     		e_time = icaltime_convert_to_zone(e_time,
     				icaltimezone_get_builtin_timezone(startTimeZone.c_str()));
 
@@ -4748,7 +4748,7 @@ struct icaltimetype ICalConverter::importCreatedTime(icalcomponent *pComp, T *tC
         c_time = icalproperty_get_created(pProp);
         }
     }
-    if(c_time.is_utc) 
+    if(icaltime_is_utc(c_time)) 
         szZone = "UTC";
     time1 = icaltime_as_timet_with_zone(c_time, 
             icaltimezone_get_builtin_timezone(szZone.c_str()));
@@ -4771,7 +4771,7 @@ void ICalConverter::importDateStamp(icalcomponent *pComp, T *tComp, struct icalt
         icalcomponent_get_first_property(pComp, ICAL_DTSTAMP_PROPERTY);
     if (pProp) {
         dtstamp_time = icalproperty_get_dtstamp(pProp);
-    if(dtstamp_time.is_utc)
+    if(icaltime_is_utc(dtstamp_time))
         szZone = "UTC";
         time1 = icaltime_as_timet_with_zone(c_time, 
             icaltimezone_get_builtin_timezone(szZone.c_str()));
@@ -5437,7 +5437,7 @@ void ICalConverter::importComponentLastModified(icalcomponent *pComp, CComponent
                      ICAL_LASTMODIFIED_PROPERTY);
     if (pProp) {
     lastmod_time = icalproperty_get_lastmodified(pProp);
-    if(lastmod_time.is_utc)
+    if(icaltime_is_utc(lastmod_time))
         szZone = "UTC";
     modified_time = icaltime_as_timet_with_zone(lastmod_time,
             icaltimezone_get_builtin_timezone(szZone.c_str()));
@@ -5680,7 +5680,7 @@ void ICalConverter::importEventRecurrence(icalcomponent *pComp,
 	    parseTimeZone(szZone);
         
         string szTempZone = szZone;
-        if(until.is_utc == 1)
+        if(icaltime_is_utc(until))
             szTempZone = "UTC";
         time_t until_t =icaltime_as_timet_with_zone(until, 
         	    icaltimezone_get_builtin_timezone(szTempZone.c_str()));
