@@ -24,11 +24,16 @@ ifneq (,$(findstring thumb,$(DEB_BUILD_OPTIONS)))
 	CPPFLAGS += -mthumb
 endif
 
+
 # Prefer hardware floating point if enabled
 ifneq (,$(findstring vfp,$(DEB_BUILD_OPTIONS)))
 	CFLAGS += -mfpu=vfp -mfloat-abi=softfp
 	CPPFLAGS += -mfpu=vfp -mfloat-abi=softfp
 endif
+
+# GCC throws bogus errors unfortunately
+CFLAGS += -Wno-format-security -Wno-format-overflow
+CXXFLAGS += -Wno-format-security -Wno-format-overflow
 
 debian/stamp-autotools-files:
 	autoreconf -v --install
