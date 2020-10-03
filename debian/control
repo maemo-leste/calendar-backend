@@ -1,8 +1,8 @@
 Source: calendar-backend
 Section: office 
 Priority: optional
-Maintainer: Andrey Moiseenko <andrey.moiseenko@nokia.com>
-Uploaders: Andrey Moiseenko <andrey.moiseenko@nokia.com>
+Maintainer: Merlijn Wajer <merlijn@wizzup.org>
+Uploaders: Merlijn Wajer <merlijn@wizzup.org>
 Build-Depends: debhelper (>= 4.0.0), cdbs, doxygen, libical-dev, libsqlite3-dev, libdbus-1-dev, libalarm-dev, libtime-dev
 Standards-Version: 3.8.0
 
