@@ -50,7 +50,7 @@ VCalConverter::~VCalConverter()
 
 FileType VCalConverter::checkContentsType(string szContents)
 {
-    unsigned int loc = 0;
+    string::size_type loc = 0;
     /*checking for DCREATED */
     if(( szContents.find(DCREATED, 0) != string::npos)||
        (szContents.find(RSVP_YES, 0) != string::npos) ||
@@ -116,7 +116,7 @@ FileType VCalConverter::checkContentsType(string szContents)
 
 string VCalConverter::getTranspFromVcal(string szContents)
 {
-    unsigned int loc;
+    string::size_type loc;
 
     /* FIXME: We should write a parser that uses ':' as the delimiter
      * instead of doing string.find(). This will not only make the
@@ -141,7 +141,7 @@ string VCalConverter::getTranspFromVcal(string szContents)
 icaltimetype VCalConverter::getCreatedTimeFromVcal(string szContents)
 {
 
-    unsigned int loc;
+    string::size_type loc;
     std::istringstream iss(szContents);
     string szLine;
     string time;
@@ -163,7 +163,7 @@ icaltimetype VCalConverter::getCreatedTimeFromVcal(string szContents)
 
 int VCalConverter::getStatusFromVcal(string szContents)
 {
-    unsigned int loc;
+    string::size_type loc;
 
     /* FIXME: Use ':' based parser */
     loc = szContents.find(STATUS_SENT, 0);
@@ -203,7 +203,7 @@ int VCalConverter::getStatusFromVcal(string szContents)
 
 int VCalConverter::getParticipationRoleFromVcal(string szContents)
 {
-    unsigned int loc;
+    string::size_type loc;
 
     /* FIXME: Use ':' based parser */
     loc = szContents.find(ROLE_ATTENDEE, 0);
@@ -312,7 +312,7 @@ icalparameter *VCalConverter::getVcalRSVP(bool fRSVP)
 
 bool VCalConverter::getRSVPFromVcal(string szContents)
 {
-    unsigned int loc;
+    string::size_type loc;
 
     /* FIXME: Use ':' based parser */
     loc = szContents.find(RSVP_YES, 0);
@@ -328,7 +328,7 @@ bool VCalConverter::getRSVPFromVcal(string szContents)
 
 string VCalConverter::getVcalCreatedTime(string szTime, string szContents)
 {
-    unsigned int loc;
+    string::size_type loc;
     string szBefore;
     string szAfter;
     string szRet;
@@ -433,7 +433,7 @@ void VCalConverter::initRecurrenceItem(RecurrenceItem * item)
 
 int VCalConverter::getDay(string vcal, bool opFlag)
 {
-    unsigned int found = -1;
+    string::size_type found = -1;
     int day = 0;
    
     /* FIXME: Use getTokens() and conditional operator */ 
@@ -488,8 +488,8 @@ string VCalConverter::getByMonthFromVcal(string vcal)
     vector <string> tokens;
     Tokenize(vcal, tokens);
     bool start = true;
-    unsigned int index = 0;
-    unsigned int found = -1;
+    string::size_type index = 0;
+    string::size_type found = -1;
    
     /* FIXME: following if combinations have to be re-written */ 
     index = tokens.size() - 1;
@@ -519,7 +519,7 @@ string VCalConverter::getByMonthFromVcal(string vcal)
 string VCalConverter::getByDayFromVcal(string vcal)
 {
     string modifier = string();
-    unsigned int found = -1;
+    string::size_type found = -1;
     unsigned int day = 0;
     bool flag = false;
     bool start = true;
@@ -647,7 +647,7 @@ string VCalConverter::getDurationFromVcal(string vcal)
     if (tokens.size() < 1)
         return duration;
 
-    unsigned int index = tokens.size() - 1;
+    string::size_type index = tokens.size() - 1;
 
     CAL_DEBUG_LOG("tokens at index is %s", tokens.at(index).c_str());
     if ((tokens.at(index)).find(HASH) != string::npos ||
@@ -714,7 +714,7 @@ string VCalConverter::vCalToICalRule(string vcal)
     /* getting interval of recurrence rule */
     CAL_DEBUG_LOG("vcal is %s\n", vcal.c_str());
 
-    int interval_pos = vcal.find(" ", index);
+    string::size_type interval_pos = vcal.find(" ", index);
     CAL_DEBUG_LOG("pos is %d\n", interval_pos);
 
     if (interval_pos - index != 0) {
@@ -1195,7 +1195,7 @@ string VCalConverter::getVCalDate(vector <string> tokens,
 string VCalConverter::getNoDelimiterString(string str, string delimiters,
                        string repStr)
 {
-    unsigned int found;
+    string::size_type found;
     found = str.find_first_of(delimiters);
     while (found != string::npos) {
 	str[found] = repStr.c_str()[0];
@@ -1262,8 +1262,8 @@ string VCalConverter::getAudioAlarm(string alarm)
      * AALARM;TYPE=WAVE;VALUE=CONTENT-ID:20090108T101000Z;PT7M; 
      */
 
-    int initial = 0;
-    int final = 0;
+    string::size_type initial = 0;
+    string::size_type final = 0;
     initial = alarm.find(":");
     final = alarm.find(";", initial + 1);
 
@@ -1334,7 +1334,7 @@ string VCalConverter::iCalToVCalAlarm(string iCalAlarm)
      * AALARM;TYPE=WAVE;VALUE=CONTENT-ID:20090108T101000Z;PT7M; 
      */
     string 		vCalAlarm(ALARM_TYPE_WAVE_VALUE);
-    int 		sPos = string::npos;
+    string::size_type	sPos = string::npos;
     string 		szTemp;
     string 		szLine;
     std::istringstream  streamDescriptor(iCalAlarm);

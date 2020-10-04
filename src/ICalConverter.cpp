@@ -359,7 +359,7 @@ string ICalConverter::addAlarmDateToString(string strIcalComp,
                                    string strVCalAlarmDate,
         			   entryType iType )
 {
-    unsigned int startPos = 0;
+    string::size_type startPos = 0;
     string temp;
     if (((startPos = strIcalComp.find(END_EVENT, 0)) != string::npos) || 
     ((startPos = strIcalComp.find(END_TODO, 0)) != string::npos)) {
@@ -389,7 +389,7 @@ string ICalConverter::addAlarmDateToString(string strIcalComp,
 string ICalConverter::addRuleToString(string strIcalComp, vector < string > rrules,
                int flag)
 {
-    unsigned int startPos = 0;
+    string::size_type startPos = 0;
     string strMatch ;
     string temp;
     string rrule;
@@ -880,13 +880,15 @@ icalparameter *ICalConverter::getTZIDParam()
     CAL_DEBUG_LOG("*** nchars = %d", nchars);
     if (nchars > 0 && nchars < DEFAULT_SIZE) {
         string szZone(zone);
-        unsigned int loc;
-    
-    CAL_DEBUG_LOG("Current timezone is %s\n", zone);
+        string::size_type loc;
+
+        CAL_DEBUG_LOG("Current timezone is %s\n", zone);
         loc = szZone.find(FW_SLASH, 0);
+
         if (loc != string::npos)
             szZone.replace(loc, 1, ICS_CALNAME_SEPERATOR);
-	parseTimeZone(szZone);
+
+        parseTimeZone(szZone);
 
         pParam = icalparameter_new_tzid(szZone.c_str());
     }
@@ -1979,7 +1981,7 @@ void ICalConverter::exportGeoFromLocal(icalcomponent *pEntcomp, T *pComp)
     icalproperty *pProp = 0;    
     /*exporting geo */
     if (!(pComp->getGeo()).empty()) {
-        unsigned int found;
+        string::size_type found;
         szGeo = pComp->getGeo();
         if ((found = szGeo.find(";")) != string::npos) {
 
@@ -3026,8 +3028,8 @@ vector <
 		pProp = NULL;
 	    }
 	}
-    } else if ((int) strIcalComp.find(strRuleType) != -1) {
-	unsigned int sPos = 0;
+    } else if (strIcalComp.find(strRuleType) != -1) {
+    string::size_type sPos = 0;
 	int count = 0;
 	while ((sPos = strIcalComp.find(strRuleType, sPos)) != string::npos) {
 	    sPos += 5;
@@ -3634,7 +3636,7 @@ string ICalConverter::validateContents(string szContents)
     string szRet;
 
     while (getline(validatess, szLine)) {
-    unsigned int loc = szLine.find('\r', 0);
+    string::size_type loc = szLine.find('\r', 0);
 
     if (loc != string::npos) {
         szLine = szLine.substr(0, (szLine.size() - 1));
@@ -3643,7 +3645,7 @@ string ICalConverter::validateContents(string szContents)
     if ((szLine.find("BEGIN:V", 0) != string::npos)
         || (szLine.find("END:V", 0) != string::npos)) {
         temp = "";
-        for (unsigned int i = 0; i < szLine.length(); i++) {
+        for (string::size_type i = 0; i < szLine.length(); i++) {
         if (szLine[i] != ' ')
             temp += szLine[i];
         }
@@ -3933,22 +3935,20 @@ ICalConverter::icalVcalToLocal(string szCont,
 #endif 
         
         if (!stringIsRRule(szLine)) {
-        	stringReplaceAll (szLine, "\\,", ",");
-        	unsigned int startpos = 0 ;
-        	while ((startpos = szLine.find("\\,", startpos))!= string ::npos )
-        	{
-        		szLine.replace(startpos,2 ,",");
-        		startpos++;
-        	}
-        	
-        	startpos = 0;
-        	while ((startpos = szLine.find(",", startpos))!= string ::npos )
-        	{
-        		szLine.replace(startpos,1 ,"\\,");
-        		startpos = startpos+ 2;
-        	}
-        	
-        	
+            stringReplaceAll (szLine, "\\,", ",");
+            string::size_type startpos = 0 ;
+            while ((startpos = szLine.find("\\,", startpos))!= string ::npos )
+            {
+                szLine.replace(startpos,2 ,",");
+                startpos++;
+            }
+
+            startpos = 0;
+            while ((startpos = szLine.find(",", startpos))!= string ::npos )
+            {
+                szLine.replace(startpos,1 ,"\\,");
+                startpos = startpos+ 2;
+            }
         }
 
         /*
@@ -4399,7 +4399,7 @@ ICalConverter::importEventDateStartAndDateEnd (
     				(iType == ICAL_TYPE))	{
     		const char *tzid = icalparameter_get_tzid(pParam);
     		string szIcsTimeZone = tzid;
-    		unsigned int i = szIcsTimeZone.find("-", 0);
+            string::size_type i = szIcsTimeZone.find("-", 0);
     		if (i != string::npos) {
     				szIcsTimeZone.replace(i, 1, "/");
     				CAL_DEBUG_LOG("ICAL Time zone is %s  " ,szIcsTimeZone.c_str());
@@ -4640,7 +4640,7 @@ ICalConverter::importEventDateEnd (
         	endTimeZone = tzid;
         	CAL_DEBUG_LOG("date end is %s \n", ctime(&end_time));
 
-        	unsigned int i = endTimeZone.find("-", 0);
+            string::size_type i = endTimeZone.find("-", 0);
         	if (i != string::npos) {
         		endTimeZone.replace(i, 1, "/");
         		CAL_DEBUG_LOG("ICAL Time zone is %s  " ,endTimeZone.c_str());
@@ -4737,15 +4737,13 @@ struct icaltimetype ICalConverter::importCreatedTime(icalcomponent *pComp, T *tC
 
     /*importing created time */
     if (iType == VCAL_TYPE) {
-    VCalConverter *pVCal = new VCalConverter();
+        VCalConverter *pVCal = new VCalConverter();
         c_time = pVCal->getCreatedTimeFromVcal(strIcalComp);
-    delete pVCal;
+        delete pVCal;
     } else {
-        pProp =
-        icalcomponent_get_first_property(pComp,
-                         ICAL_CREATED_PROPERTY);
+        pProp = icalcomponent_get_first_property(pComp, ICAL_CREATED_PROPERTY);
         if (pProp) {
-        c_time = icalproperty_get_created(pProp);
+            c_time = icalproperty_get_created(pProp);
         }
     }
     if(icaltime_is_utc(c_time)) 
@@ -5639,8 +5637,8 @@ void ICalConverter::importEventRecurrence(icalcomponent *pComp,
     delete pRrule;
     pRrule = 0;
     
-        unsigned int pos1;
-        unsigned int pos2;
+        string::size_type pos1;
+        string::size_type pos2;
         if ((pos1 = (rrule.find(UNTIL_ICAL))) != string::npos) {
             rrule = rrule.substr(pos1 + 6);
             if ((pos2 = (rrule.find(' '))) != string::npos)
@@ -5688,7 +5686,7 @@ void ICalConverter::importEventRecurrence(icalcomponent *pComp,
         //pEvent->setUntil(until_t);
         /* check if until has 6 T000000 if so replace 
          * add offset of 86399 sec to until field */
-        unsigned int i = 0;
+        string::size_type i = 0;
         i = rrule.find(SIX_O,0);
         
         if (i == string::npos || ((until_t + ONEDAY - 1) >= MAX_SUPPORTED_YEAR_IN_SEC)){
@@ -6458,7 +6456,7 @@ string ICalConverter::getTimeInHHMM(int diffTime)
 
 void ICalConverter::parseTimeZone(string &szZone)
 {
-    unsigned int pos = 0;
+    string::size_type pos = 0;
     if (szZone.empty())
 	    return ;
     if((pos = szZone.find(":", 0)) != string::npos)
