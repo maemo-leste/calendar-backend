@@ -1,3 +1,10 @@
+calendar-backend (0.9.1) unstable; urgency=low
+
+  * Fix bugs on 64 bit platforms, code was never tested on 64 bit I can only
+    imagine
+
+ -- Merlijn Wajer <merlijn@wizzup.org>  Sun, 04 Oct 2020 21:09:26 +0200
+
 calendar-backend (0.9) unstable; urgency=low
 
   * Initial Maemo Leste import
