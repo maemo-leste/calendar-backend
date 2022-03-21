@@ -488,7 +488,7 @@ string ICalConverter::appendControlM(string szContents)
     std::istringstream iss(szContents);
     while (getline(iss, szLine)) {
 
-    unsigned int loc = szLine.length();
+    size_t loc = szLine.length();
 
     if (loc != 0) {
         szLine = szLine + "\r";
