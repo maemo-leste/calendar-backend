@@ -2861,7 +2861,7 @@ vector < string > ICalConverter::getRecurrenceDates(string strIcalComp,
             break;
     }
     if (strIcalComp.find(strRuleType) != string::npos ) {
-    unsigned int sPos = 0;
+    size_t sPos = 0;
     int count = 0;
     while ((sPos =
         strIcalComp.find(strRuleType, sPos)) != string::npos) {
