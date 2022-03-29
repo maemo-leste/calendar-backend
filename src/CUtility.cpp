@@ -174,8 +174,7 @@ std::vector < time_t > CUtility::getRecurrentTimes(string szRRule,
     time_t utc_tim = 0;
     vector < time_t > listtime;
     bool loopexit = false;
-    unsigned int pos = 0;
-    pos = szRRule.find(UNTIL_ICAL,0);
+    size_t pos = szRRule.find(UNTIL_ICAL,0);
     if(pos != string::npos)
     {
 	/* Find the six zeros and then substitute them with 
@@ -234,7 +233,7 @@ void CUtility::releasePropertiesVector(std::vector < CProperties * > vec)
 icaltimezone* CUtility::getSystemTimeZoneAsIcalTimeZone()
 {
     string szZone(getSystemTimeZone());
-    unsigned int i = 0;
+    size_t i = 0;
 
     if((i = szZone.find(":",0)) != string::npos)
 	szZone = szZone.substr(i+1);
