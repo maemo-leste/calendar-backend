@@ -104,8 +104,7 @@ int CProperties::getDataType(string szProp)
     return STRING;
 
     /* Default type for all X -param and Prop is STRING */
-    int found;
-    found = szProp.find("X-", 0);
+    size_t found = szProp.find("X-", 0);
 
     if (found != (int)string::npos)
     return STRING;
