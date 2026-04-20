@@ -632,8 +632,7 @@ bool CMulticalendar::getRecurrentTimes(string szRRule,
      */
     //icaltimezone* pTz = 0;
     //icaltimezone* pTz = CMulticalendar::getSystemTimeZoneAsIcalTimeZone();
-    unsigned int pos = 0;
-    pos = szRRule.find(UNTIL_ICAL,0);
+    size_t pos = szRRule.find(UNTIL_ICAL,0);
     if(pos != string::npos)
     {
 	/* Find the six zeros and then substitute them with 
@@ -706,8 +705,7 @@ time_t CMulticalendar::getInstanceBeyond(string szRRule,
     bool loopexit = false;
     bool instanceIndicator = false;
     
-    unsigned int pos = 0;
-    pos = szRRule.find(UNTIL_ICAL,0);
+    size_t pos = szRRule.find(UNTIL_ICAL,0);
     if(pos != string::npos)
     {
 	/* Find the six zeros and then substitute them with 
@@ -4060,7 +4058,7 @@ bool CMulticalendar::getICSFileInfoProgressive(string szFileName,
     pErrorCode = CALENDAR_OPERATION_SUCCESSFUL;
     string stemp("file://");
     ifstream ics_file_stream;
-    unsigned int iDummy = 0;
+    size_t iDummy = 0;
     bool bIsFirstRead = false;
 
     if(iFileOffset == 0) {
@@ -4326,7 +4324,7 @@ bool CMulticalendar::importIcsFileData(string szFileName, int iCalId,
     iDuplicateCountJournal = 0;
 
     pErrorCode = CALENDAR_OPERATION_SUCCESSFUL;
-    unsigned int iDummy;
+    size_t iDummy;
     string stemp(ICS_FILENAME_SEPERATOR);
 
     iDummy = szFileName.find(stemp);
@@ -4452,7 +4450,7 @@ bool CMulticalendar::importIcsFileDataProgressive(string szFileName, int iCalId,
     iDuplicateCountJournal = 0;
 
     pErrorCode = CALENDAR_OPERATION_SUCCESSFUL;
-    unsigned int iDummy;
+    size_t iDummy;
     string stemp(ICS_FILENAME_SEPERATOR);
 
     iDummy = szFileName.find(stemp);
@@ -6299,8 +6297,7 @@ time_t CMulticalendar::getSystemTimeShift()
 icaltimezone* CMulticalendar::getSystemTimeZoneAsIcalTimeZone()
 {
   string szZone(getSystemTimeZone());
-  unsigned int i = 0;
-  i = szZone.find(":",0); 
+  size_t i = szZone.find(":",0);
   
   if(i != string::npos) 
   szZone = szZone.substr(i+1);

@@ -116,8 +116,7 @@ int CParameters::getDataType(string szPropParam)
 
 
     /* Default type for all X -param and Prop is STRING */
-    int found;
-    found = szPropParam.find("X-", 0);
+    size_t found = szPropParam.find("X-", 0);
 
     if (found != (int)string::npos)
     return STRING;
